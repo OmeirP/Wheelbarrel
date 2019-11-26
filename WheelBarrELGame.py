@@ -7,7 +7,7 @@ pygame.init()
 display_width = 800
 display_height = 600
 
-black = (0,0,0)#test
+black = (0,0,0)#test sdijdf
 white = (255,255,255) # 256 choices, including 0
 red = (255,0,0) # red first
 green = (0,255,0)

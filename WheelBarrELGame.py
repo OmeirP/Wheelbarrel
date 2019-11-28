@@ -129,7 +129,8 @@ def game_loop():
                 thing_speed *= 1.3
 
         if y < thing_starty+thing_height:
-            print("y crossover")
+            #print("y crossover")
+            pass
 
             if x > thing_startx and x < thing_startx + thing_width or x + wheel_barrel_width > thing_startx and x + wheel_barrel_width < thing_startx + thing_width:
                 print("x crossover")

@@ -84,6 +84,9 @@ def game_loop():
     thingCount = 1
 
     dodged = 0
+    
+    highScore = 0
+    Score = dodged
 
     gameExit = False
 

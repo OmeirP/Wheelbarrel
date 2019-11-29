@@ -17,7 +17,7 @@ obs_colour = (69,42,162)
 
 wheel_barrel_width = 270/4
 
-highScore = 0
+highscore = 0
 
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
@@ -29,9 +29,9 @@ wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
 
 backgroundImg = pygame.image.load('backgroundpng.png')
 
-def scoreupdate(dodged, score):
-    while True:
-        score = dodged
+#def scoreupdate(dodged, score):
+#    while True:
+#        score = dodged
 
 
 
@@ -39,7 +39,7 @@ def scoreupdate(dodged, score):
 
 def things_dodged(dcount, score):
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: " + str(score) + "/nHighscore: " + highScore, True, black)
+    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: """" + str(score) + "/nHighscore: " + highScore""", True, black)
     gameDisplay.blit(text, (0,0))
 
 
@@ -93,11 +93,17 @@ def game_loop():
 
     thingCount = 1
 
+
+
     dodged = 0
 
 
     # while True:
     score = dodged
+
+
+    if score >= highscore:
+        highscore = score
 
     gameExit = False
 

@@ -75,7 +75,7 @@ def messgae_display(text):
 
 
 def crash():
-    messgae_display("You done crashed")
+    message_display("You done crashed")
 
 
 def game_loop():

@@ -2,6 +2,7 @@ import pygame
 import time
 import random
 import _thread
+import shelve
 
 pygame.init()
 
@@ -17,8 +18,6 @@ obs_colour = (69,42,162)
 
 wheel_barrel_width = 270/4
 
-highscore = 0
-
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
 pygame.display.set_caption('Get ur driving license')
@@ -29,19 +28,28 @@ wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
 
 backgroundImg = pygame.image.load('backgroundpng.png')
 
+
+
+highscore = shelve.open("highscorevalue.txt")
+
+highscore['highscorething']
+
+
 #def scoreupdate(dodged, score):
 #    while True:
 #        score = dodged
 
 
 
+#def things_dodged(dcount, score):
+#    font = pygame.font.SysFont(None, 25)
+#    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: " + str(score) + "/nHighscore: " + highScore, True, black)
+#    gameDisplay.blit(text, (0,0))
 
-
-def things_dodged(dcount, score):
+def things_dodged(dcount):
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: """" + str(score) + "/nHighscore: " + highScore""", True, black)
+    text = font.render("Score: " + str(dcount), True, black)
     gameDisplay.blit(text, (0,0))
-
 
 
 
@@ -61,7 +69,7 @@ def text_object(text, font):
 
 
 
-def messgae_display(text):
+def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 88)
     TextSurf, TextRect = text_object(text, largeText)
     TextRect.center = ((display_width/2), (display_height/2))
@@ -99,11 +107,9 @@ def game_loop():
 
 
     # while True:
-    score = dodged
 
-
-    if score >= highscore:
-        highscore = score
+#    if score >= highscore:
+#        highscore = score
 
     gameExit = False
 
@@ -129,13 +135,14 @@ def game_loop():
 
         gameDisplay.blit(backgroundImg, (0, 0))
 
-        scoreupdate(dodged, score)
+#        scoreupdate(dodged, score)
 
         #things(thingx, thingy, thingw, thingh, colour)
         things(thing_startx, thing_starty, thing_width, thing_height, obs_colour)
         thing_starty += thing_speed
         wheelbarrel(x,y)
-        things_dodged(dodged, score)
+        things_dodged(dodged)
+
 
         if x > display_width - wheel_barrel_width or x < 0:#x is top right corner of barrel
             crash()

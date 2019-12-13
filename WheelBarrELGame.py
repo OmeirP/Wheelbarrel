@@ -29,10 +29,13 @@ wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
 backgroundImg = pygame.image.load('backgroundpng.png')
 
 
+highscore = 0 #read contents of txt file to this var
 
-highscore = shelve.open("highscorevalue.txt")
 
-highscore['highscorething']
+
+"""highscore = shelve.open("highscorevalue.txt")
+
+highscore['highscorething']"""
 
 
 #def scoreupdate(dodged, score):
@@ -45,6 +48,23 @@ highscore['highscorething']
 #    font = pygame.font.SysFont(None, 25)
 #    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: " + str(score) + "/nHighscore: " + highScore, True, black)
 #    gameDisplay.blit(text, (0,0))
+
+
+
+
+
+def highscorereblit(dodged):
+    global highscore
+
+    if dodged > highscore:
+        highscore = dodged
+
+    font = pygame.font.SysFont(None, 25)
+    text2 = font.render("Highscore: " + str(highscore), True, black)
+    gameDisplay.blit(text2, (0,25))
+
+
+
 
 def things_dodged(dcount):
     font = pygame.font.SysFont(None, 25)
@@ -86,6 +106,7 @@ def crash():
     message_display("You done crashed")
 
 
+
 def game_loop():
 
     x = (display_width * 0.45)
@@ -99,7 +120,7 @@ def game_loop():
     thing_width = 100
     thing_height = 100
 
-    thingCount = 1
+#    thingCount = 1
 
 
 
@@ -142,6 +163,7 @@ def game_loop():
         thing_starty += thing_speed
         wheelbarrel(x,y)
         things_dodged(dodged)
+        highscorereblit(dodged)
 
 
         if x > display_width - wheel_barrel_width or x < 0:#x is top right corner of barrel

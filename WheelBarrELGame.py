@@ -29,7 +29,13 @@ wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
 backgroundImg = pygame.image.load('backgroundpng.png')
 
 
-highscore = 0 #read contents of txt file to this var
+#highscore = 0 #read contents of txt file to this var
+
+hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
+
+hsvfile= open(hsvpath,'r+') #close in gameExit function
+
+highscore = hsvfile.read()
 
 
 
@@ -56,8 +62,11 @@ highscore['highscorething']"""
 def highscorereblit(dodged):
     global highscore
 
-    if dodged > highscore:
+    if dodged > int(highscore):
         highscore = dodged
+        hsvfile= open(hsvpath,'r+')
+        hsvfile.write(str(dodged))
+        
 
     font = pygame.font.SysFont(None, 25)
     text2 = font.render("Highscore: " + str(highscore), True, black)

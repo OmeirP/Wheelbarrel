@@ -1,6 +1,8 @@
 import pygame
 import time
 import random
+import _thread
+import shelve
 
 pygame.init()
 
@@ -27,11 +29,56 @@ wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
 backgroundImg = pygame.image.load('backgroundpng.png')
 
 
+#highscore = 0 #read contents of txt file to this var
+
+hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
+
+hsvfile= open(hsvpath,'r+') #close in gameExit function
+
+highscore = hsvfile.read()
+
+
+
+"""highscore = shelve.open("highscorevalue.txt")
+
+highscore['highscorething']"""
+
+
+#def scoreupdate(dodged, score):
+#    while True:
+#        score = dodged
+
+
+
+#def things_dodged(dcount, score):
+#    font = pygame.font.SysFont(None, 25)
+#    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: " + str(score) + "/nHighscore: " + highScore, True, black)
+#    gameDisplay.blit(text, (0,0))
+
+
+
+
+
+def highscorereblit(dodged):
+    global highscore
+
+    if dodged > int(highscore):
+        highscore = dodged
+        hsvfile= open(hsvpath,'r+')
+        hsvfile.write(str(dodged))
+        
+
+    font = pygame.font.SysFont(None, 25)
+    text2 = font.render("Highscore: " + str(highscore), True, black)
+    gameDisplay.blit(text2, (0,25))
+
+
+
+
 def things_dodged(dcount):
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Obstacles dodged: " + str(dcount), True, black)
+    text = font.render("Score: " + str(dcount), True, black)
     gameDisplay.blit(text, (0,0))
-
 
 
 
@@ -51,7 +98,7 @@ def text_object(text, font):
 
 
 
-def messgae_display(text):
+def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 88)
     TextSurf, TextRect = text_object(text, largeText)
     TextRect.center = ((display_width/2), (display_height/2))
@@ -65,7 +112,8 @@ def messgae_display(text):
 
 
 def crash():
-    messgae_display("You done crashed")
+    message_display("You done crashed")
+
 
 
 def game_loop():
@@ -81,9 +129,17 @@ def game_loop():
     thing_width = 100
     thing_height = 100
 
-    thingCount = 1
+#    thingCount = 1
+
+
 
     dodged = 0
+
+
+    # while True:
+
+#    if score >= highscore:
+#        highscore = score
 
     gameExit = False
 
@@ -109,11 +165,15 @@ def game_loop():
 
         gameDisplay.blit(backgroundImg, (0, 0))
 
+#        scoreupdate(dodged, score)
+
         #things(thingx, thingy, thingw, thingh, colour)
         things(thing_startx, thing_starty, thing_width, thing_height, obs_colour)
         thing_starty += thing_speed
         wheelbarrel(x,y)
         things_dodged(dodged)
+        highscorereblit(dodged)
+
 
         if x > display_width - wheel_barrel_width or x < 0:#x is top right corner of barrel
             crash()
@@ -126,7 +186,8 @@ def game_loop():
                 thing_speed *= 1.3
 
         if y < thing_starty+thing_height:
-            print("y crossover")
+            #print("y crossover")
+            pass
 
             if x > thing_startx and x < thing_startx + thing_width or x + wheel_barrel_width > thing_startx and x + wheel_barrel_width < thing_startx + thing_width:
                 print("x crossover")
@@ -137,7 +198,11 @@ def game_loop():
         pygame.display.update()
         clock.tick(60)  #tick is for fps
 
+#def scoreupdate(dodged):
+#    while True:
+#        score = dodged
 
+#_thread.start_new_thread(scoreupdate)
 game_loop()
 pygame.quit()
 quit()

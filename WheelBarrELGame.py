@@ -28,6 +28,8 @@ wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
 
 backgroundImg = pygame.image.load('backgroundpng.png')
 
+obstImage = pygame.image.load('obstImagewsspng.png')
+
 
 #highscore = 0 #read contents of txt file to this var
 
@@ -83,7 +85,7 @@ def things_dodged(dcount):
 
 
 def things(thingx, thingy, thingw, thingh, colour):
-    pygame.draw.rect(gameDisplay, colour, [thingx, thingy, thingw, thingh])
+    gameDisplay.blit(obstImage, (thingx, thingy))
 
 
 

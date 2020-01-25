@@ -23,6 +23,7 @@ bright_green = (0,255,0)
 obs_colour = (69,42,162)
 
 wheel_barrel_width = 245/4
+wheel_barrel_height = 378/4
 
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
@@ -255,8 +256,8 @@ def game_loop():
             pass
 
             if x > thing_startx and x < thing_startx + thing_width or x + wheel_barrel_width > thing_startx and x + wheel_barrel_width < thing_startx + thing_width:
-                print("x crossover")
-                crash()
+                if y > thing_starty and y < thing_starty + thing_height or y + wheel_barrel_height > thing_starty and y + wheel_barrel_height < thing_starty + thing_height:
+                    crash()
 
 
 

@@ -22,7 +22,7 @@ bright_green = (0,255,0)
 
 obs_colour = (69,42,162)
 
-wheel_barrel_width = 270/4
+wheel_barrel_width = 245/4
 
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
@@ -191,8 +191,8 @@ def game_loop():
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
     thing_speed = 4
-    thing_width = 100
-    thing_height = 100
+    thing_width = 90
+    thing_height = 90
 
 #    thingCount = 1
 

@@ -27,11 +27,14 @@ wheel_barrel_height = 378/4
 
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
-pygame.display.set_caption('Get ur driving license')
+pygame.display.set_caption('WheelbarrelGame')
 clock = pygame.time.Clock()
 
 wheelBarrelImg = pygame.image.load('WheelBarrEL.png')
 wheelBarrelImg = pygame.transform.scale(wheelBarrelImg, ((245//4),(378//4)))
+
+wbIcon = pygame.image.load('WheelBarrEL.png')
+pygame.display.set_icon(wbIcon)
 
 backgroundImg = pygame.image.load('backgroundpng.png')
 

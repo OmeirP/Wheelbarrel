@@ -42,6 +42,7 @@ menuBackgroundImg = pygame.image.load('menuBackground.png')
 
 obstImage = pygame.image.load('obstImagewsspng.png')
 
+#winImg = pygame.draw.rect(gameDisplay,black,(random.randrange(0, display_width),0, 2, 2) ))
 
 #highscore = 0 #read contents of txt file to this var
 
@@ -70,7 +71,8 @@ highscore['highscorething']"""
 #    gameDisplay.blit(text, (0,0))
 
 
-
+def air():
+    gameDisplay.blit(winImg, (random.randrange(0, display_width),(random.randrange(0, display_width), 2, 2) ))
 
 
 def highscorereblit(dodged):

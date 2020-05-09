@@ -110,9 +110,18 @@ def things(thingx, thingy, thingw, thingh, colour):
 def wheelbarrel(x,y):
     gameDisplay.blit(wheelBarrelImg, (x,y))
 
-def text_object(text, font):
-    textSurface = font.render(text, True, black)     #IMPORTANT True is for antialiasing.
-    return textSurface, textSurface.get_rect()
+
+def set_colour(text, font):
+    if pause == True:
+        textSurface = font.render(text, True, green)     #IMPORTANT True is for antialiasing.
+        return textSurface, textSurface.get_rect()
+    else:
+        textSurface = font.render(text, True, black)     #IMPORTANT True is for antialiasing.
+        return textSurface, textSurface.get_rect()
+
+
+def text_object():
+    set_colour(text, font)
 
 
 
@@ -157,7 +166,7 @@ def button(msg,x,y,w,h,ic,ac,action=None):
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
     smallText = pygame.font.Font("freesansbold.ttf",20)
-    textSurf, textRect = text_object(msg, smallText)
+    textSurf, textRect = set_colour(msg, smallText)
     textRect.center = ((x+(w/2)), (y+(h/2)))
     gameDisplay.blit(textSurf, textRect)
 
@@ -174,20 +183,14 @@ def paused():
                 quit()
         gameDisplay.blit(pausemenubg, (0,0))
         largeText = pygame.font.Font('freesansbold.ttf', 88)
-        TextSurf, TextRect = text_object("Paused", largeText)
+        TextSurf, TextRect = set_colour("Paused", largeText)
         TextRect.center = ((display_width/2), (display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
 
-        button("Continue",150,450,100,50,green,bright_green,"unpause")
+        button("Continue",150,450,100,50,blue,bright_blue,"unpause")
         button("Exit",550,450,100,50,red,bright_red,"quit")
 
         mouse = pygame.mouse.get_pos()
-
-        """if 550+100 > mouse[0] > 550 and 450 + 50 > mouse[1] > 450:
-            pygame.draw.rect(gameDisplay, bright_red, (550,450,100,50))
-        else:
-            pygame.draw.rect(gameDisplay, red, (550,450,100,50))"""
-
 
 
         pygame.display.update()
@@ -205,7 +208,7 @@ def game_intro():
                 quit()
         gameDisplay.blit(menuBackgroundImg, (0,0))
         largeText = pygame.font.Font('freesansbold.ttf', 88)
-        TextSurf, TextRect = text_object("Wheelbarrel", largeText)
+        TextSurf, TextRect = set_colour("Wheelbarrel", largeText)
         TextRect.center = ((display_width/2), (display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
 
@@ -268,7 +271,6 @@ def game_loop():
                 if event.key == pygame.K_p:
                     pause = True
                     paused()
-
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0

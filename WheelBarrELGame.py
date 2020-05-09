@@ -25,6 +25,8 @@ obs_colour = (69,42,162)
 wheel_barrel_width = 245/4
 wheel_barrel_height = 378/4
 
+pause = False
+
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
 pygame.display.set_caption('WheelbarrelGame')
@@ -41,6 +43,8 @@ backgroundImg = pygame.image.load('backgroundpng.png')
 menuBackgroundImg = pygame.image.load('menuBackground.png')
 
 obstImage = pygame.image.load('obstImagewsspng.png')
+
+pausemenubg=pygame.image.load('pausebg.png')
 
 #winImg = pygame.draw.rect(gameDisplay,black,(random.randrange(0, display_width),0, 2, 2) ))
 
@@ -147,6 +151,8 @@ def button(msg,x,y,w,h,ic,ac,action=None):
             elif action == "quit":
                 pygame.quit()
                 quit()
+            elif action == "unpause":
+                unpause()
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
@@ -155,6 +161,37 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     textRect.center = ((x+(w/2)), (y+(h/2)))
     gameDisplay.blit(textSurf, textRect)
 
+def unpause():
+    global pause
+    pause = False
+
+
+def paused():
+    while pause:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.blit(pausemenubg, (0,0))
+        largeText = pygame.font.Font('freesansbold.ttf', 88)
+        TextSurf, TextRect = text_object("Paused", largeText)
+        TextRect.center = ((display_width/2), (display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Continue",150,450,100,50,green,bright_green,"unpause")
+        button("Exit",550,450,100,50,red,bright_red,"quit")
+
+        mouse = pygame.mouse.get_pos()
+
+        """if 550+100 > mouse[0] > 550 and 450 + 50 > mouse[1] > 450:
+            pygame.draw.rect(gameDisplay, bright_red, (550,450,100,50))
+        else:
+            pygame.draw.rect(gameDisplay, red, (550,450,100,50))"""
+
+
+
+        pygame.display.update()
+        clock.tick(15)
 
 
 
@@ -190,6 +227,7 @@ def game_intro():
 
 
 def game_loop():
+    global pause
 
     x = (display_width * 0.45)
     y = (display_height * 0.75)
@@ -227,6 +265,9 @@ def game_loop():
                     x_change = -5
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
+                if event.key == pygame.K_p:
+                    pause = True
+                    paused()
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:

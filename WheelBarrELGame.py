@@ -81,6 +81,7 @@ highscore['highscorething']"""
 
 def highscorereblit(dodged):
     global highscore
+    global font
 
     if dodged > int(highscore):
         highscore = dodged
@@ -120,7 +121,7 @@ def set_colour(text, font):
         return textSurface, textSurface.get_rect()
 
 
-def text_object():
+def text_object(text, font):
     set_colour(text, font)
 
 
@@ -129,7 +130,7 @@ def text_object():
 
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 88)
-    TextSurf, TextRect = text_object(text, largeText)
+    TextSurf, TextRect = set_colour(text, largeText)
     TextRect.center = ((display_width/2), (display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
 
@@ -141,6 +142,7 @@ def message_display(text):
 
 
 def crash():
+    crashed=True
     message_display("You done crashed")
 
 
@@ -189,6 +191,12 @@ def paused():
 
         button("Continue",150,450,100,50,blue,bright_blue,"unpause")
         button("Exit",550,450,100,50,red,bright_red,"quit")
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    unpause()
 
         mouse = pygame.mouse.get_pos()
 

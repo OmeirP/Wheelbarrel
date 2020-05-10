@@ -25,6 +25,8 @@ obs_colour = (69,42,162)
 wheel_barrel_width = 245/4
 wheel_barrel_height = 378/4
 
+pause = False
+
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
 pygame.display.set_caption('WheelbarrelGame')
@@ -41,6 +43,8 @@ backgroundImg = pygame.image.load('backgroundpng.png')
 menuBackgroundImg = pygame.image.load('menuBackground.png')
 
 obstImage = pygame.image.load('obstImagewsspng.png')
+
+pausemenubg=pygame.image.load('pausebg.png')
 
 #winImg = pygame.draw.rect(gameDisplay,black,(random.randrange(0, display_width),0, 2, 2) ))
 
@@ -106,9 +110,18 @@ def things(thingx, thingy, thingw, thingh, colour):
 def wheelbarrel(x,y):
     gameDisplay.blit(wheelBarrelImg, (x,y))
 
+
+def set_colour(text, font):
+    if pause == True:
+        textSurface = font.render(text, True, green)     #IMPORTANT True is for antialiasing.
+        return textSurface, textSurface.get_rect()
+    else:
+        textSurface = font.render(text, True, black)     #IMPORTANT True is for antialiasing.
+        return textSurface, textSurface.get_rect()
+
+
 def text_object(text, font):
-    textSurface = font.render(text, True, black)     #IMPORTANT True is for antialiasing.
-    return textSurface, textSurface.get_rect()
+    set_colour(text, font)
 
 
 
@@ -116,7 +129,7 @@ def text_object(text, font):
 
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 88)
-    TextSurf, TextRect = text_object(text, largeText)
+    TextSurf, TextRect = set_colour(text, largeText)
     TextRect.center = ((display_width/2), (display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
 
@@ -128,6 +141,7 @@ def message_display(text):
 
 
 def crash():
+    crashed=True
     message_display("You done crashed")
 
 
@@ -147,14 +161,49 @@ def button(msg,x,y,w,h,ic,ac,action=None):
             elif action == "quit":
                 pygame.quit()
                 quit()
+            elif action == "unpause":
+                unpause()
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
     smallText = pygame.font.Font("freesansbold.ttf",20)
-    textSurf, textRect = text_object(msg, smallText)
+    textSurf, textRect = set_colour(msg, smallText)
     textRect.center = ((x+(w/2)), (y+(h/2)))
     gameDisplay.blit(textSurf, textRect)
 
+def unpause():
+    global pause
+    pause = False
+
+
+def paused():
+    while pause:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.blit(pausemenubg, (0,0))
+        largeText = pygame.font.Font('freesansbold.ttf', 88)
+        TextSurf, TextRect = set_colour("Paused", largeText)
+        TextRect.center = ((display_width/2), (display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Continue",150,450,100,50,blue,bright_blue,"unpause")
+        button("Exit",550,450,100,50,red,bright_red,"quit")
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    unpause()
+                if event.key == pygame.K_SPACE:
+                    unpause()
+
+        mouse = pygame.mouse.get_pos()
+
+
+        pygame.display.update()
+        clock.tick(15)
 
 
 
@@ -168,7 +217,7 @@ def game_intro():
                 quit()
         gameDisplay.blit(menuBackgroundImg, (0,0))
         largeText = pygame.font.Font('freesansbold.ttf', 88)
-        TextSurf, TextRect = text_object("Wheelbarrel", largeText)
+        TextSurf, TextRect = set_colour("Wheelbarrel", largeText)
         TextRect.center = ((display_width/2), (display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
 
@@ -190,6 +239,7 @@ def game_intro():
 
 
 def game_loop():
+    global pause
 
     x = (display_width * 0.45)
     y = (display_height * 0.75)
@@ -227,7 +277,12 @@ def game_loop():
                     x_change = -5
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
-
+                if event.key == pygame.K_p:
+                    pause = True
+                    paused()
+                if event.key == pygame.K_SPACE:
+                    pause = True
+                    paused()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0

@@ -81,7 +81,6 @@ highscore['highscorething']"""
 
 def highscorereblit(dodged):
     global highscore
-    global font
 
     if dodged > int(highscore):
         highscore = dodged
@@ -197,6 +196,8 @@ def paused():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     unpause()
+                if event.key == pygame.K_SPACE:
+                    unpause()
 
         mouse = pygame.mouse.get_pos()
 
@@ -277,6 +278,9 @@ def game_loop():
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
                 if event.key == pygame.K_p:
+                    pause = True
+                    paused()
+                if event.key == pygame.K_SPACE:
                     pause = True
                     paused()
             if event.type == pygame.KEYUP:

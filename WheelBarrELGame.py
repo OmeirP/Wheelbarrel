@@ -25,7 +25,7 @@ obs_colour = (69,42,162)
 wheel_barrel_width = 245/4
 wheel_barrel_height = 378/4
 
-crashed = False
+cra = False
 pause = False
 
 
@@ -45,7 +45,7 @@ menuBackgroundImg = pygame.image.load('menuBackground.png')
 
 obstImage = pygame.image.load('obstImagewsspng.png')
 
-pausemenubg=pygame.image.load('pausebg.png')
+secmenbg=pygame.image.load('secondarymenubg.png')
 
 #winImg = pygame.draw.rect(gameDisplay,black,(random.randrange(0, display_width),0, 2, 2) ))
 
@@ -113,11 +113,11 @@ def wheelbarrel(x,y):
 
 
 def set_colour(text, font):
-    if pause == True:
+    if cra == True:
         textSurface = font.render(text, True, green)     #IMPORTANT True is for antialiasing.
         return textSurface, textSurface.get_rect()
-    elif crashed == True:
-        textSurface = font.render(text, True, green)    #IMPORTANT True is for antialiasing.
+    elif pause == True:
+        textSurface = font.render(text, True, green)
         return textSurface, textSurface.get_rect()
     else:
         textSurface = font.render(text, True, black)     #IMPORTANT True is for antialiasing.
@@ -144,30 +144,6 @@ def message_display(text):
     game_loop()
 
 
-def crash():
-    crashed = True
-
-    gameDisplay.blit(pausemenubg, (0,0))
-    largeText = pygame.font.Font('freesansbold.ttf', 88)
-    TextSurf, TextRect = set_colour("U cRasH?!", largeText)
-    TextRect.center = ((display_width/2), (display_height/2))
-    gameDisplay.blit(TextSurf, TextRect)
-    
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        button("Play Again",150,450,100,50,blue,bright_blue,"play")
-        button("Exit",550,450,100,50,red,bright_red,"quit")
-
-
-        mouse = pygame.mouse.get_pos()
-
-
-        pygame.display.update()
-        clock.tick(15)
 
 
 
@@ -196,13 +172,43 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     textRect.center = ((x+(w/2)), (y+(h/2)))
     gameDisplay.blit(textSurf, textRect)
 
+
+def crash():
+    global cra
+    cra = True
+
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        gameDisplay.blit(secmenbg, (0,0))
+        largeText = pygame.font.Font('freesansbold.ttf', 88)
+        TextSurf, TextRect = set_colour("U cRasH?!", largeText)
+        TextRect.center = ((display_width/2), (display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Retry",150,450,100,50,blue,bright_blue,"play")
+        button("Exit",550,450,100,50,red,bright_red,"quit")
+
+
+        mouse = pygame.mouse.get_pos()
+
+
+        pygame.display.update()
+        clock.tick(15)
+
+
+
 def unpause():
     global pause
     pause = False
 
 
 def paused():
-    gameDisplay.blit(pausemenubg, (0,0))
+    gameDisplay.blit(secmenbg, (0,0))
     largeText = pygame.font.Font('freesansbold.ttf', 88)
     TextSurf, TextRect = set_colour("Paused", largeText)
     TextRect.center = ((display_width/2), (display_height/2))
@@ -267,7 +273,6 @@ def game_intro():
 def game_loop():
     global pause
 
-    crashed=False
 
     x = (display_width * 0.45)
     y = (display_height * 0.75)

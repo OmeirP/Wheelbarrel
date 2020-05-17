@@ -239,7 +239,7 @@ def paused():
 
 
 
-
+#Put altered game_intro func for shop and trigger with button inside game_intro function.
 def game_intro():
     intro = True
     while intro:

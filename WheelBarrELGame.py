@@ -3,6 +3,7 @@ import time
 import random
 import _thread
 import shelve
+import shopUpgrades
 
 pygame.init()
 

@@ -25,7 +25,7 @@ obs_colour = (69,42,162)
 wheel_barrel_width = 245/4
 wheel_barrel_height = 378/4
 
-cra = False
+crashScreen = False
 pause = False
 
 
@@ -113,7 +113,7 @@ def wheelbarrel(x,y):
 
 
 def set_colour(text, font):
-    if cra == True:
+    if crashScreen == True:
         textSurface = font.render(text, True, green)     #IMPORTANT True is for antialiasing.
         return textSurface, textSurface.get_rect()
     elif pause == True:
@@ -174,8 +174,8 @@ def button(msg,x,y,w,h,ic,ac,action=None):
 
 
 def crash():
-    global cra
-    cra = True
+    global crashScreen
+    crashScreen = True
 
     
     while True:
@@ -239,7 +239,7 @@ def paused():
 
 
 
-
+#Put altered game_intro func for shop and trigger with button inside game_intro function.
 def game_intro():
     intro = True
     while intro:

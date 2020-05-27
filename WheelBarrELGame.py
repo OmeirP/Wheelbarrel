@@ -4,7 +4,7 @@ import random
 import _thread
 import shelve
 import shopUpgrades
-from shopUpgrades import market
+#from shopUpgrades import market
 
 pygame.init()
 

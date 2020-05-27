@@ -4,6 +4,7 @@ import random
 import _thread
 import shelve
 import shopUpgrades
+#from shopUpgrades import shop
 
 pygame.init()
 
@@ -165,6 +166,8 @@ def button(msg,x,y,w,h,ic,ac,action=None):
                 quit()
             elif action == "unpause":
                 unpause()
+            elif action == "entershop":
+                shopUpgrades.shop()
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
@@ -257,14 +260,9 @@ def game_intro():
         button("Go!",150,450,100,50,green,bright_green,"play")
         button("Exit",550,450,100,50,red,bright_red,"quit")
 
+        button("Shop",350,450,100,50,blue,bright_blue,"entershop")
+
         mouse = pygame.mouse.get_pos()
-
-        """if 550+100 > mouse[0] > 550 and 450 + 50 > mouse[1] > 450:
-            pygame.draw.rect(gameDisplay, bright_red, (550,450,100,50))
-        else:
-            pygame.draw.rect(gameDisplay, red, (550,450,100,50))"""
-
-
 
         pygame.display.update()
         clock.tick(15)

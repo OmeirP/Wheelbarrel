@@ -1,4 +1,8 @@
 # Shop Module. not working inside main file to keep clean.
+import pygame
+import WheelBarrELGame
+from WheelBarrELGame import *
+
 shopScreen = False
 
 

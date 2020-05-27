@@ -3,8 +3,7 @@ import time
 import random
 import _thread
 import shelve
-import shopUpgrades
-#from shopUpgrades import market
+
 
 pygame.init()
 
@@ -29,6 +28,8 @@ wheel_barrel_height = 378/4
 
 crashScreen = False
 pause = False
+shopScreen = False
+
 
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
@@ -49,9 +50,6 @@ obstImage = pygame.image.load('obstImagewsspng.png')
 
 secmenbg=pygame.image.load('secondarymenubg.png')
 
-#winImg = pygame.draw.rect(gameDisplay,black,(random.randrange(0, display_width),0, 2, 2) ))
-
-#highscore = 0 #read contents of txt file to this var
 
 hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 
@@ -60,26 +58,6 @@ hsvfile= open(hsvpath,'r+') #close in gameExit function
 highscore = hsvfile.read()
 
 
-
-"""highscore = shelve.open("highscorevalue.txt")
-
-highscore['highscorething']"""
-
-
-#def scoreupdate(dodged, score):
-#    while True:
-#        score = dodged
-
-
-
-#def things_dodged(dcount, score):
-#    font = pygame.font.SysFont(None, 25)
-#    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: " + str(score) + "/nHighscore: " + highScore, True, black)
-#    gameDisplay.blit(text, (0,0))
-
-
-#def air():
-#    gameDisplay.blit(winImg, (random.randrange(0, display_width),(random.randrange(0, display_width), 2, 2) ))
 
 
 def highscorereblit(dodged):
@@ -149,7 +127,7 @@ def message_display(text):
 
 
 
-def button(msg,x,y,w,h,ic,ac,action=None):
+def button(msg,x,y,w,h,ic,ac,action=None): #sb
       #button time
 
     mouse = pygame.mouse.get_pos()
@@ -167,7 +145,7 @@ def button(msg,x,y,w,h,ic,ac,action=None):
             elif action == "unpause":
                 unpause()
             elif action == "entershop":
-                shopUpgrades.market()
+                market()
             elif action == "mainMenu":
                 game_intro()
     else:
@@ -271,6 +249,28 @@ def game_intro():
 
 
 
+def market(): # trigger shop func through button added on menu in game_intro
+    shopScreen = True
+    while shopScreen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.blit(menuBackgroundImg, (0,0))
+        largeText = pygame.font.Font('freesansbold.ttf', 88)
+        TextSurf, TextRect = set_colour("Shop", largeText)
+        TextRect.center = ((display_width/2), (display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        button("Exit",650,500,100,50,red,bright_red,"quit") # keep same
+
+        mouse = pygame.mouse.get_pos()
+
+        pygame.display.update()
+        clock.tick(15)
+
+
+
 def game_loop():
     global pause
 
@@ -291,12 +291,6 @@ def game_loop():
 
 
     dodged = 0
-
-
-    # while True:
-
-#    if score >= highscore:
-#        highscore = score
 
     gameExit = False
 
@@ -327,7 +321,7 @@ def game_loop():
 
         gameDisplay.blit(backgroundImg, (0, 0))
 
-#        scoreupdate(dodged, score)
+
 
         #things(thingx, thingy, thingw, thingh, colour)
         things(thing_startx, thing_starty, thing_width, thing_height, obs_colour)
@@ -360,11 +354,6 @@ def game_loop():
         pygame.display.update()
         clock.tick(60)  #tick is for fps
 
-#def scoreupdate(dodged):
-#    while True:
-#        score = dodged
-
-#_thread.start_new_thread(scoreupdate)
 
 game_intro()
 game_loop()

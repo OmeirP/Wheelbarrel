@@ -168,6 +168,8 @@ def button(msg,x,y,w,h,ic,ac,action=None):
                 unpause()
             elif action == "entershop":
                 shopUpgrades.shop()
+            elif action == "mainMenu":
+                game_intro()
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 

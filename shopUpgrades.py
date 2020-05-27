@@ -1,7 +1,7 @@
 # Shop Module. not working inside main file to keep clean.
 import pygame
 import WheelBarrELGame
-from WheelBarrELGame import *
+#from WheelBarrELGame import *
 
 shopScreen = False
 
@@ -13,14 +13,14 @@ def shop(): # trigger shop func through button added on menu in game_intro
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        gameDisplay.blit(menuBackgroundImg, (0,0))
+        WheelBarrELGame.gameDisplay.blit(WheelBarrELGame.menuBackgroundImg, (0,0))
         largeText = pygame.font.Font('freesansbold.ttf', 88)
-        TextSurf, TextRect = set_colour("Shop", largeText)
-        TextRect.center = ((display_width/2), (display_height/2))
-        gameDisplay.blit(TextSurf, TextRect)
+        TextSurf, TextRect = WheelBarrELGame.set_colour("Shop", largeText)
+        TextRect.center = ((WheelBarrELGame.display_width/2), (WheelBarrELGame.display_height/2))
+        WheelBarrELGame.gameDisplay.blit(TextSurf, TextRect)
 
-        button("Go!",150,450,100,50,green,bright_green,"play") #Change go to return to menu and change play to string to go to game_intro func
-        button("Exit",550,450,100,50,red,bright_red,"quit") # keep same
+        #WheelBarrELGame.button("Back",150,450,100,50,WheelBarrELGame.green,WheelBarrELGame.bright_green,"mainMenu") #Change go to return to menu and change play to string to go to game_intro func
+        WheelBarrELGame.button("Exit",350,450,100,50,WheelBarrELGame.red,WheelBarrELGame.bright_red,"quit") # keep same
 
         mouse = pygame.mouse.get_pos()
 
@@ -32,4 +32,4 @@ def shop(): # trigger shop func through button added on menu in game_intro
 
 
         pygame.display.update()
-        clock.tick(15)
+        WheelBarrELGame.clock.tick(15)

@@ -4,7 +4,7 @@ import random
 import _thread
 import shelve
 import shopUpgrades
-#from shopUpgrades import shop
+from shopUpgrades import market
 
 pygame.init()
 
@@ -167,7 +167,7 @@ def button(msg,x,y,w,h,ic,ac,action=None):
             elif action == "unpause":
                 unpause()
             elif action == "entershop":
-                shopUpgrades.shop()
+                shopUpgrades.market()
             elif action == "mainMenu":
                 game_intro()
     else:

@@ -6,7 +6,7 @@ import WheelBarrELGame
 shopScreen = False
 
 
-def shop(): # trigger shop func through button added on menu in game_intro
+def market(): # trigger shop func through button added on menu in game_intro
     shopScreen = True
     while shopScreen:
         for event in pygame.event.get():
@@ -20,7 +20,7 @@ def shop(): # trigger shop func through button added on menu in game_intro
         WheelBarrELGame.gameDisplay.blit(TextSurf, TextRect)
 
         #WheelBarrELGame.button("Back",150,450,100,50,WheelBarrELGame.green,WheelBarrELGame.bright_green,"mainMenu") #Change go to return to menu and change play to string to go to game_intro func
-        WheelBarrELGame.button("Exit",350,450,100,50,WheelBarrELGame.red,WheelBarrELGame.bright_red,"quit") # keep same
+        WheelBarrELGame.button("Exit",650,500,100,50,WheelBarrELGame.red,WheelBarrELGame.bright_red,"quit") # keep same
 
         mouse = pygame.mouse.get_pos()
 

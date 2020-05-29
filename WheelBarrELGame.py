@@ -55,7 +55,8 @@ hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 
 hsvfile= open(hsvpath,'r+') #close in gameExit function
 
-highscore = hsvfile.read()
+highscore = hsvfile.readline()
+speedUpgrades=hsvfile.readline()
 
 
 

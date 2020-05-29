@@ -56,7 +56,17 @@ hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 hsvfile= open(hsvpath,'r+') #close in gameExit function
 
 highscore = hsvfile.readline()
-speedUpgrades=hsvfile.readline()
+speedLvl=hsvfile.readline()
+
+print(speedLvl)
+
+
+def speedlvlblit(speedLvl):
+    font = pygame.font.SysFont(None, 25)
+    text3 = font.render("Speed Multiplier (Up and Down to toggle): x" + str(speedLvl), True, black)
+    gameDisplay.blit(text3, (0,50))
+
+
 
 
 
@@ -303,9 +313,9 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x_change = -5
+                    x_change = -5 * speedLvl
                 if event.key == pygame.K_RIGHT:
-                    x_change = 5
+                    x_change = 5 * speedLvl
                 if event.key == pygame.K_p:
                     pause = True
                     paused()
@@ -330,6 +340,7 @@ def game_loop():
         wheelbarrel(x,y)
         things_dodged(dodged)
         highscorereblit(dodged)
+        speedlvlblit(speedLvl)
 
 
         if x > display_width - wheel_barrel_width or x < 0: #x is top right corner of barrel

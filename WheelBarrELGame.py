@@ -56,9 +56,10 @@ hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 hsvfile= open(hsvpath,'r+') #close in gameExit function
 
 highscore = hsvfile.readline()
+coinpile = hsvfile.readline()
 speedLvl=hsvfile.readline()
 
-print(speedLvl)
+#print(speedLvl)
 
 
 def speedlvlblit(speedLvl):
@@ -67,6 +68,10 @@ def speedlvlblit(speedLvl):
     gameDisplay.blit(text3, (0,50))
 
 
+def SpUpgrade(coinpile):
+    if speedLvl == 1 and coinpile >= 10:
+        speedLvl += 1
+        coinpile -= 10
 
 
 
@@ -159,6 +164,8 @@ def button(msg,x,y,w,h,ic,ac,action=None): #sb
                 market()
             elif action == "mainMenu":
                 game_intro()
+            elif action == "SpeUp":
+                SpUpgrade()
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
@@ -270,11 +277,16 @@ def market(): # trigger shop func through button added on menu in game_intro
         gameDisplay.blit(menuBackgroundImg, (0,0))
         largeText = pygame.font.Font('freesansbold.ttf', 88)
         TextSurf, TextRect = set_colour("Upgrades", largeText)
-        TextRect.center = ((display_width/2), (display_height/2))
+        TextRect.center = ((display_width/2), (display_height/10))
         gameDisplay.blit(TextSurf, TextRect)
 
-
-        button("Speed Upgrade",650,500,'x?','y?','colour1','colour2',"SpeUp")
+        if speedLvl == 1:
+            button("Speed Upgrade",100,150,150,50,green,bright_green,"SpeUp")
+        elif speedLvl == 2:
+            button("Speed Upgrade 2",100,150,150,50,green,bright_green,"SpeUp")
+        elif speedLvl == 3:
+            button("Speed Upgrade 3",100,150,150,50,green,bright_green,"SpeUp")
+        
         button("Exit",650,500,100,50,red,bright_red,"quit") # keep same
 
         mouse = pygame.mouse.get_pos()

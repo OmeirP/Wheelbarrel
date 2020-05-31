@@ -55,12 +55,17 @@ hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 
 hsvfile= open(hsvpath,'r+') #close in gameExit function
 
-highscore = hsvfile.readline()
-coinpile = hsvfile.readline()
-speedLvl=hsvfile.readline()
+# highscore = hsvfile.readline()
+# coinpile = hsvfile.readline()
+# speedLvl=hsvfile.readline()
 
-#print(speedLvl)
+filedata=hsvfile.readlines()
 
+highscore = filedata[0]
+coinpile = filedata[1]
+speedLvl = filedata[2]
+
+print(filedata)
 
 def speedlvlblit(speedLvl):
     font = pygame.font.SysFont(None, 25)
@@ -72,6 +77,7 @@ def SpUpgrade(coinpile):
     if speedLvl == 1 and coinpile >= 10:
         speedLvl += 1
         coinpile -= 10
+        hsvfile.writelines(filedata)
 
 
 
@@ -82,7 +88,8 @@ def highscorereblit(dodged):
     if dodged > int(highscore):
         highscore = dodged
         hsvfile= open(hsvpath,'r+')
-        hsvfile.write(str(dodged))
+        #hsvfile.write(str(dodged))
+        hsvfile.writelines(filedata)
         
 
     font = pygame.font.SysFont(None, 25)
@@ -165,7 +172,7 @@ def button(msg,x,y,w,h,ic,ac,action=None): #sb
             elif action == "mainMenu":
                 game_intro()
             elif action == "SpeUp":
-                SpUpgrade()
+                SpUpgrade(coinpile)
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
@@ -194,6 +201,8 @@ def crash():
 
         button("Retry",150,450,100,50,blue,bright_blue,"play")
         button("Exit",550,450,100,50,red,bright_red,"quit")
+
+        hsvfile.writelines(filedata)
 
 
         mouse = pygame.mouse.get_pos()
@@ -280,12 +289,12 @@ def market(): # trigger shop func through button added on menu in game_intro
         TextRect.center = ((display_width/2), (display_height/10))
         gameDisplay.blit(TextSurf, TextRect)
 
-        if speedLvl == 1:
-            button("Speed Upgrade",100,150,150,50,green,bright_green,"SpeUp")
-        elif speedLvl == 2:
-            button("Speed Upgrade 2",100,150,150,50,green,bright_green,"SpeUp")
-        elif speedLvl == 3:
-            button("Speed Upgrade 3",100,150,150,50,green,bright_green,"SpeUp")
+        #if speedLvl == 1:
+        button("Speed Upgrade",100,150,150,50,green,bright_green,"SpeUp")
+        #elif speedLvl == 2:
+        #    button("Speed Upgrade 2",100,150,150,50,green,bright_green,"SpeUp")
+        #elif speedLvl == 3:
+        #    button("Speed Upgrade 3",100,150,150,50,green,bright_green,"SpeUp")
         
         button("Exit",650,500,100,50,red,bright_red,"quit") # keep same
 
@@ -327,9 +336,9 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x_change = -5 * speedLvl
+                    x_change = -5 * int(speedLvl)
                 if event.key == pygame.K_RIGHT:
-                    x_change = 5 * speedLvl
+                    x_change = 5 * int(speedLvl)
                 if event.key == pygame.K_p:
                     pause = True
                     paused()

@@ -61,6 +61,7 @@ hsvfile= open(hsvpath,'r+') #close in gameExit function
 
 filedata=hsvfile.readlines()
 
+
 highscore = filedata[0]
 coinpile = filedata[1]
 speedLvl = filedata[2]

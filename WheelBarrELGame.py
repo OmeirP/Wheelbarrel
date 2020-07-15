@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 import _thread
-import shelve
+import pickle
 
 
 pygame.init()
@@ -51,22 +51,51 @@ obstImage = pygame.image.load('obstImagewsspng.png')
 secmenbg=pygame.image.load('secondarymenubg.png')
 
 
-hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
+#hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 
-hsvfile= open(hsvpath,'r+') #close in gameExit function
+#hsvfile= open(hsvpath,'r+') #close in gameExit function
 
 # highscore = hsvfile.readline()
 # coinpile = hsvfile.readline()
 # speedLvl=hsvfile.readline()
 
-filedata=hsvfile.readlines()
+#filedata=hsvfile.readlines()
 
 
-highscore = filedata[0]
-coinpile = filedata[1]
-speedLvl = filedata[2]
+#highscore = filedata[0]
+#coinpile = filedata[1]
+#speedLvl = filedata[2]
 
-print(filedata)
+"""saveFile=open("barrelsave.pickle","rb")
+
+speedLvl = pickle.load(saveFile)
+print(speedLvl)"""
+
+try:
+    saveFile=open("barrelsave.pickle","rb")
+    coinpile, speedLvl, highscore = pickle.load(saveFile)
+    #coinpile = pickle.load(saveFile)
+    #highscore = pickle.load(saveFile)
+    saveFile.close()
+
+except:
+    saveFile=open("barrelsave.pickle","wb")
+    print("No save file found.")
+    speedLvl = 1
+    coinpile = 21
+    highscore = 0
+    pickle.dump((coinpile, speedLvl, highscore), saveFile)
+    saveFile.close()
+    #print(saveFile)
+
+#with open("barrelsave.pickle", "wb") as saveFile:
+
+#saveFile=open("barrelsave.pickle","wb")
+    """pickle.dump((coinpile, speedLvl), saveFile)
+    saveFile.close()"""
+
+
+#print(filedata)
 
 def speedlvlblit(speedLvl):
     font = pygame.font.SysFont(None, 25)
@@ -74,11 +103,11 @@ def speedlvlblit(speedLvl):
     gameDisplay.blit(text3, (0,50))
 
 
-def SpUpgrade(coinpile):
+def SpUpgrade(coinpile, speedLvl):
     if speedLvl == 1 and coinpile >= 10:
         speedLvl += 1
         coinpile -= 10
-        hsvfile.writelines(filedata)
+        #hsvfile.writelines(filedata)
 
 
 
@@ -88,9 +117,9 @@ def highscorereblit(dodged):
 
     if dodged > int(highscore):
         highscore = dodged
-        hsvfile= open(hsvpath,'r+')
+        #hsvfile= open(hsvpath,'r+')
         #hsvfile.write(str(dodged))
-        hsvfile.writelines(filedata)
+        #hsvfile.writelines(filedata)
         
 
     font = pygame.font.SysFont(None, 25)
@@ -173,7 +202,7 @@ def button(msg,x,y,w,h,ic,ac,action=None): #sb
             elif action == "mainMenu":
                 game_intro()
             elif action == "SpeUp":
-                SpUpgrade(coinpile)
+                SpUpgrade(coinpile, speedLvl)
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
@@ -203,7 +232,7 @@ def crash():
         button("Retry",150,450,100,50,blue,bright_blue,"play")
         button("Exit",550,450,100,50,red,bright_red,"quit")
 
-        hsvfile.writelines(filedata)
+        #hsvfile.writelines(filedata)
 
 
         mouse = pygame.mouse.get_pos()

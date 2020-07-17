@@ -73,7 +73,7 @@ print(speedLvl)"""
 
 try:
     saveFile=open("barrelsave.pickle","rb")
-    coinpile, speedLvl, highscore = pickle.load(saveFile)
+    (coinpile, speedLvl, highscore) = pickle.load(saveFile)
     #coinpile = pickle.load(saveFile)
     #highscore = pickle.load(saveFile)
     saveFile.close()
@@ -84,10 +84,13 @@ except:
     speedLvl = 1
     coinpile = 21
     highscore = 0
-    pickle.dump((coinpile, speedLvl, highscore), saveFile)
-    saveFile.close()
+    saveFunc()
     #print(saveFile)
 
+def saveFunc():
+    saveFile=open("barrelsave.pickle","wb")
+    pickle.dump((coinpile, speedLvl, highscore), saveFile)
+    saveFile.close()
 #with open("barrelsave.pickle", "wb") as saveFile:
 
 #saveFile=open("barrelsave.pickle","wb")
@@ -193,6 +196,7 @@ def button(msg,x,y,w,h,ic,ac,action=None): #sb
             if action == "play":
                 game_loop()
             elif action == "quit":
+                saveFunc()
                 pygame.quit()
                 quit()
             elif action == "unpause":
@@ -201,6 +205,7 @@ def button(msg,x,y,w,h,ic,ac,action=None): #sb
                 market()
             elif action == "mainMenu":
                 game_intro()
+                saveFunc
             elif action == "SpeUp":
                 SpUpgrade(coinpile, speedLvl)
     else:

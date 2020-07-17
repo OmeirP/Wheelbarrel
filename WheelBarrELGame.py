@@ -2,7 +2,8 @@ import pygame
 import time
 import random
 import _thread
-import shelve
+import pickle
+
 
 pygame.init()
 
@@ -27,6 +28,8 @@ wheel_barrel_height = 378/4
 
 crashScreen = False
 pause = False
+shopScreen = False
+
 
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))  #resolution size. 2 pairs of brackets because otherwise python sees two args instead of a tuple.
@@ -47,37 +50,69 @@ obstImage = pygame.image.load('obstImagewsspng.png')
 
 secmenbg=pygame.image.load('secondarymenubg.png')
 
-#winImg = pygame.draw.rect(gameDisplay,black,(random.randrange(0, display_width),0, 2, 2) ))
 
-#highscore = 0 #read contents of txt file to this var
+#hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
 
-hsvpath="J:/Dev/Wheelbarrel/HSV.txt"
+#hsvfile= open(hsvpath,'r+') #close in gameExit function
 
-hsvfile= open(hsvpath,'r+') #close in gameExit function
+# highscore = hsvfile.readline()
+# coinpile = hsvfile.readline()
+# speedLvl=hsvfile.readline()
 
-highscore = hsvfile.read()
-
-
-
-"""highscore = shelve.open("highscorevalue.txt")
-
-highscore['highscorething']"""
+#filedata=hsvfile.readlines()
 
 
-#def scoreupdate(dodged, score):
-#    while True:
-#        score = dodged
+#highscore = filedata[0]
+#coinpile = filedata[1]
+#speedLvl = filedata[2]
+
+"""saveFile=open("barrelsave.pickle","rb")
+
+speedLvl = pickle.load(saveFile)
+print(speedLvl)"""
+
+try:
+    saveFile=open("barrelsave.pickle","rb")
+    (coinpile, speedLvl, highscore) = pickle.load(saveFile)
+    #coinpile = pickle.load(saveFile)
+    #highscore = pickle.load(saveFile)
+    saveFile.close()
+
+except:
+    saveFile=open("barrelsave.pickle","wb")
+    print("No save file found.")
+    speedLvl = 1
+    coinpile = 21
+    highscore = 0
+    saveFunc()
+    #print(saveFile)
+
+def saveFunc():
+    saveFile=open("barrelsave.pickle","wb")
+    pickle.dump((coinpile, speedLvl, highscore), saveFile)
+    saveFile.close()
+#with open("barrelsave.pickle", "wb") as saveFile:
+
+#saveFile=open("barrelsave.pickle","wb")
+    """pickle.dump((coinpile, speedLvl), saveFile)
+    saveFile.close()"""
 
 
+#print(filedata)
 
-#def things_dodged(dcount, score):
-#    font = pygame.font.SysFont(None, 25)
-#    text = font.render("Obstacles dodged: " + str(dcount) + "/nScore: " + str(score) + "/nHighscore: " + highScore, True, black)
-#    gameDisplay.blit(text, (0,0))
+def speedlvlblit(speedLvl):
+    font = pygame.font.SysFont(None, 25)
+    text3 = font.render("Speed Multiplier (Up and Down to toggle): x" + str(speedLvl), True, black)
+    gameDisplay.blit(text3, (0,50))
 
 
-#def air():
-#    gameDisplay.blit(winImg, (random.randrange(0, display_width),(random.randrange(0, display_width), 2, 2) ))
+def SpUpgrade(coinpile, speedLvl):
+    if speedLvl == 1 and coinpile >= 10:
+        speedLvl += 1
+        coinpile -= 10
+        #hsvfile.writelines(filedata)
+
+
 
 
 def highscorereblit(dodged):
@@ -85,8 +120,9 @@ def highscorereblit(dodged):
 
     if dodged > int(highscore):
         highscore = dodged
-        hsvfile= open(hsvpath,'r+')
-        hsvfile.write(str(dodged))
+        #hsvfile= open(hsvpath,'r+')
+        #hsvfile.write(str(dodged))
+        #hsvfile.writelines(filedata)
         
 
     font = pygame.font.SysFont(None, 25)
@@ -147,7 +183,7 @@ def message_display(text):
 
 
 
-def button(msg,x,y,w,h,ic,ac,action=None):
+def button(msg,x,y,w,h,ic,ac,action=None): #sb
       #button time
 
     mouse = pygame.mouse.get_pos()
@@ -160,10 +196,18 @@ def button(msg,x,y,w,h,ic,ac,action=None):
             if action == "play":
                 game_loop()
             elif action == "quit":
+                saveFunc()
                 pygame.quit()
                 quit()
             elif action == "unpause":
                 unpause()
+            elif action == "entershop":
+                market()
+            elif action == "mainMenu":
+                game_intro()
+                saveFunc
+            elif action == "SpeUp":
+                SpUpgrade(coinpile, speedLvl)
     else:
         pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
 
@@ -192,6 +236,8 @@ def crash():
 
         button("Retry",150,450,100,50,blue,bright_blue,"play")
         button("Exit",550,450,100,50,red,bright_red,"quit")
+
+        #hsvfile.writelines(filedata)
 
 
         mouse = pygame.mouse.get_pos()
@@ -256,14 +302,38 @@ def game_intro():
         button("Go!",150,450,100,50,green,bright_green,"play")
         button("Exit",550,450,100,50,red,bright_red,"quit")
 
+        button("Shop",350,450,100,50,blue,bright_blue,"entershop")
+
         mouse = pygame.mouse.get_pos()
 
-        """if 550+100 > mouse[0] > 550 and 450 + 50 > mouse[1] > 450:
-            pygame.draw.rect(gameDisplay, bright_red, (550,450,100,50))
-        else:
-            pygame.draw.rect(gameDisplay, red, (550,450,100,50))"""
+        pygame.display.update()
+        clock.tick(15)
 
 
+
+def market(): # trigger shop func through button added on menu in game_intro
+    shopScreen = True
+    while shopScreen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.blit(menuBackgroundImg, (0,0))
+        largeText = pygame.font.Font('freesansbold.ttf', 88)
+        TextSurf, TextRect = set_colour("Upgrades", largeText)
+        TextRect.center = ((display_width/2), (display_height/10))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        #if speedLvl == 1:
+        button("Speed Upgrade",100,150,150,50,green,bright_green,"SpeUp")
+        #elif speedLvl == 2:
+        #    button("Speed Upgrade 2",100,150,150,50,green,bright_green,"SpeUp")
+        #elif speedLvl == 3:
+        #    button("Speed Upgrade 3",100,150,150,50,green,bright_green,"SpeUp")
+        
+        button("Exit",650,500,100,50,red,bright_red,"quit") # keep same
+
+        mouse = pygame.mouse.get_pos()
 
         pygame.display.update()
         clock.tick(15)
@@ -291,12 +361,6 @@ def game_loop():
 
     dodged = 0
 
-
-    # while True:
-
-#    if score >= highscore:
-#        highscore = score
-
     gameExit = False
 
     while not gameExit:
@@ -307,9 +371,9 @@ def game_loop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x_change = -5
+                    x_change = -5 * int(speedLvl)
                 if event.key == pygame.K_RIGHT:
-                    x_change = 5
+                    x_change = 5 * int(speedLvl)
                 if event.key == pygame.K_p:
                     pause = True
                     paused()
@@ -326,7 +390,7 @@ def game_loop():
 
         gameDisplay.blit(backgroundImg, (0, 0))
 
-#        scoreupdate(dodged, score)
+
 
         #things(thingx, thingy, thingw, thingh, colour)
         things(thing_startx, thing_starty, thing_width, thing_height, obs_colour)
@@ -334,6 +398,7 @@ def game_loop():
         wheelbarrel(x,y)
         things_dodged(dodged)
         highscorereblit(dodged)
+        speedlvlblit(speedLvl)
 
 
         if x > display_width - wheel_barrel_width or x < 0: #x is top right corner of barrel
@@ -359,11 +424,6 @@ def game_loop():
         pygame.display.update()
         clock.tick(60)  #tick is for fps
 
-#def scoreupdate(dodged):
-#    while True:
-#        score = dodged
-
-#_thread.start_new_thread(scoreupdate)
 
 game_intro()
 game_loop()

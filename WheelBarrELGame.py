@@ -48,6 +48,8 @@ menuBackgroundImg = pygame.image.load('menuBackground.png')
 
 obstImage = pygame.image.load('obstImagewsspng.png')
 
+coinImage = pygame.image.load('wbcoin.png')
+
 secmenbg=pygame.image.load('secondarymenubg.png')
 
 
@@ -71,13 +73,15 @@ secmenbg=pygame.image.load('secondarymenubg.png')
 speedLvl = pickle.load(saveFile)
 print(speedLvl)"""
 
+
+#tries to find a save file
 try:
     saveFile=open("barrelsave.pickle","rb")
     (coinpile, speedLvl, highscore) = pickle.load(saveFile)
     #coinpile = pickle.load(saveFile)
     #highscore = pickle.load(saveFile)
     saveFile.close()
-
+#if no save file found, creates one
 except:
     saveFile=open("barrelsave.pickle","wb")
     print("No save file found.")
@@ -99,6 +103,11 @@ def saveFunc():
 
 
 #print(filedata)
+
+def coinpileblit(coinpile):
+    font = pygame.font.SysFont(None, 25)
+    text4 = font.render("Coins: " + str(coinpile), True, black)
+    gameDisplay.blit(text4, (0,75))
 
 def speedlvlblit(speedLvl):
     font = pygame.font.SysFont(None, 25)
@@ -141,6 +150,9 @@ def things_dodged(dcount):
 
 def things(thingx, thingy, thingw, thingh, colour):
     gameDisplay.blit(obstImage, (thingx, thingy))
+
+def coinblit(coinx, coiny):
+    gameDisplay.blit(coinImage, (coinx, coiny))
 
 
 
@@ -349,6 +361,9 @@ def game_loop():
 
     x_change = 0
 
+    coin_startx = random.randrange(0, display_width)
+    coin_starty = -600
+    coin_speed = 4
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
     thing_speed = 4
@@ -395,10 +410,13 @@ def game_loop():
         #things(thingx, thingy, thingw, thingh, colour)
         things(thing_startx, thing_starty, thing_width, thing_height, obs_colour)
         thing_starty += thing_speed
+        coinblit(coinx, coiny)
+        coin_starty += coin_speed
         wheelbarrel(x,y)
         things_dodged(dodged)
         highscorereblit(dodged)
         speedlvlblit(speedLvl)
+        coinpileblit(coinpile)
 
 
         if x > display_width - wheel_barrel_width or x < 0: #x is top right corner of barrel
